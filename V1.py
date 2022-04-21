@@ -2,13 +2,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 from datetime import datetime, date, time
-import sqlalchemy
-import pymysql
-pymysql.install_as_MySQLdb()
+#import sqlalchemy
+#import pymysql
+#pymysql.install_as_MySQLdb()
 
-my_conn = sqlalchemy.create_engine("mysql+mysqldb://root:<AAaabb?123>@localhost/Crimela")
-crime = pd.read_sql('select count(*) from crime_data_from_2020_to_present', my_conn)
-crime
+#my_conn = sqlalchemy.create_engine("mysql+mysqldb://root:<AAaabb?123>@localhost/Crimela")
+#crime = pd.read_sql('select count(*) from crime_data_from_2020_to_present', my_conn)
+#crime
 
 def main():
     st.title("Safety LA")
