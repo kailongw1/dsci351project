@@ -1201,7 +1201,10 @@ def main():
         
         
 
+    #Cath updated
     elif choice == "Visualization":
+        st.title("Visualization")
+        st.subheader("""Area Ranking in Map""")
         data = pd.read_csv("Crime_Data_from_2020_to_Present.csv")
 
         #display data and rename
@@ -1211,20 +1214,25 @@ def main():
         columns=({ 'LAT': 'lat', 'LON': 'lon'}), 
         inplace=True,)
 
-        
+        area = st.sidebar.multiselect(
+        "Select the Area:",
+        options=df["AREA NAME"].unique(),
+        default=df["AREA NAME"].unique().all()
+        )
+        df = df[df['AREA NAME'].isin(area)]
         df["DATE OCC"] = pd.to_datetime(df["DATE OCC"])
         
 
         df = df[
         (df["DATE OCC"] >= pd.to_datetime('2022-01-01'))]
+        df = df[['lon','lat']]
         st.write(f"Data Points: {len(df)}")
-        
-
+        df.dropna()
         st.pydeck_chart(pdk.Deck(
         map_style='mapbox://styles/mapbox/light-v9',
         initial_view_state=pdk.ViewState(
-         latitude=37.76,
-         longitude=-122.4,
+         latitude=df['lat'].mean(),
+         longitude=df['lon'].mean(),
          zoom=11,
          pitch=50,
      ),
@@ -1233,8 +1241,8 @@ def main():
             'HexagonLayer',
             data=df,
             get_position='[lon, lat]',
-            radius=200,
-            elevation_scale=4,
+            radius=100,
+            elevation_scale=7,
             elevation_range=[0, 1000],
             pickable=True,
             extruded=True,
@@ -1244,13 +1252,12 @@ def main():
              data=df,
              get_position='[lon, lat]',
              get_color='[200, 30, 0, 160]',
-             get_radius=200,
+             get_radius=100,
          ),
         ],
      )
                 
-    )
-
+    )    
 
     elif choice == "Filter":
     #st.set_page_config(page_title="Crime Filter", page_icon=":bookmark_tabs:", layout="wide")
