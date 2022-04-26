@@ -1284,6 +1284,7 @@ def main():
             options=df["Vict Sex"].unique(),
             default=[]
         )
+        
         location = st.sidebar.multiselect(
         "Select the Location:",
         options=df["Premis Desc"].unique(),
@@ -1298,17 +1299,17 @@ def main():
         min_occurence = pd.to_datetime(min(df["DATE OCC"])).date()
         max_occurence = pd.to_datetime(max(df["DATE OCC"])).date()
         start_time,end_time = st.sidebar.slider("Timeline", min_value=min_occurence, max_value=max_occurence,value=[min_occurence,max_occurence])
+        
+        start_age,end_age = st.sidebar.slider("Victim Age Range:", min_value=0, max_value=100, step=1, value=[0,100])
     
 
         df = df[df['AREA NAME'].isin(area)]
         df = df[df['Crm Cd Desc'].isin(crime_type)]
         df = df[df['Vict Sex'].isin(vict_sex)]
         df = df[df['Premis Desc'].isin(location)]
-        #df = df[df['DATE OCC'] < timeline]
         df = df[(df["DATE OCC"] >= pd.to_datetime(start_time)) & (df["DATE OCC"] <= pd.to_datetime(end_time))]
+        df = df[(df["Vict Age"] >= pd.to_numeric(start_age)) & (df["Vict Age"] <= pd.to_numeric(end_age))]
 
-        
-        
         
         st.markdown("##")
         
