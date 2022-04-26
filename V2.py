@@ -1260,22 +1260,11 @@ def main():
     )    
 
     elif choice == "Filter":
-    #st.set_page_config(page_title="Crime Filter", page_icon=":bookmark_tabs:", layout="wide")
+        st.title(":chart_with_upwards_trend: Crime Filter")
 
         # ---- READ CSV ----
-        # def get_data_from_csv():
         df = pd.read_csv("Crime_Data_from_2020_to_Present.csv")
-            
-        
-        #    # Add 'hour' column to dataframe
-        #    df["hour"] = pd.to_datetime(df["Time"], format="%H:%M:%S").dt.hour
-        #    return df
 
-
-
-#df = get_data_from_csv()
-
-        #st.dataframe(df)
 
         st.sidebar.header("Please Filter Here:")
         area = st.sidebar.multiselect(
@@ -1300,16 +1289,50 @@ def main():
         options=df["Premis Desc"].unique(),
         default=[]
         )
-
-        #df = df.query(
-         #   "\"AREA NAME\" == @area & \"Crm Cd Desc\" == @crime_type & \"Vict Sex\" == @vict_sex"
-        #)
+        
+        # timeline
+        df["LAT"]=pd.to_numeric(df["LAT"])
+        df["LON"]=pd.to_numeric(df["LON"])
+        df = pd.DataFrame(df)
+        df["DATE OCC"] = pd.to_datetime(df["DATE OCC"])
+        min_occurence = pd.to_datetime(min(df["DATE OCC"])).date()
+        max_occurence = pd.to_datetime(max(df["DATE OCC"])).date()
+        start_time,end_time = st.sidebar.slider("Timeline", min_value=min_occurence, max_value=max_occurence,value=[min_occurence,max_occurence])
+    
 
         df = df[df['AREA NAME'].isin(area)]
         df = df[df['Crm Cd Desc'].isin(crime_type)]
         df = df[df['Vict Sex'].isin(vict_sex)]
         df = df[df['Premis Desc'].isin(location)]
+        #df = df[df['DATE OCC'] < timeline]
+        df = df[(df["DATE OCC"] >= pd.to_datetime(start_time)) & (df["DATE OCC"] <= pd.to_datetime(end_time))]
 
+        
+        
+        
+        st.markdown("##")
+        
+        
+        # Total Crime
+        total_crime = int(df["DATE OCC"].count())
+        danger_level = round(df["DATE OCC"].count()/10, 1)
+        skull = ":skull:" * int(round(danger_level, 0))
+
+        
+        
+        left_column, right_column = st.columns(2)
+        with left_column:
+            st.subheader("Total Selected Crime:")
+            st.subheader(f"{total_crime:,} Crime(s)")
+        with right_column:
+            st.subheader("Selected Danger Level:")
+            st.subheader(f"{danger_level} {skull}")
+
+            
+        st.markdown("""---""")
+        
+        st.write("Detailed data presented here:")
+        
         st.dataframe(df)
         
             
