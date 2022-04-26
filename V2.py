@@ -1316,8 +1316,8 @@ def main():
         
         # Total Crime
         total_crime = int(df["DATE OCC"].count())
-        danger_level = round(df["DATE OCC"].count()/10, 1)
-        skull = ":skull:" * int(round(danger_level, 0))
+        danger_level = round(df["DATE OCC"].count()/3898747*100000, 4)
+        #skull = ":skull:" * int(round(danger_level, 0))
 
         
         
@@ -1326,9 +1326,8 @@ def main():
             st.subheader("Total Selected Crime:")
             st.subheader(f"{total_crime:,} Crime(s)")
         with right_column:
-            st.subheader("Selected Danger Level:")
-            st.subheader(f"{danger_level} {skull}")
-
+            st.subheader("Selected Crime Rate:")
+            st.subheader(f"{danger_level} per 100,000 people")
             
         st.markdown("""---""")
         
