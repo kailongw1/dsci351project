@@ -1088,7 +1088,7 @@ def main():
             st.write(crime)
         
     elif choice == "Rank":
-        st.subheader("Safety Index Ranking")
+        st.title("Safety Index Ranking")
         col1,col2,col3 = st.columns(3)
         rank  = pd.read_sql('select `AREA NAME`,count(*) FROM Crimela.crime_data_from_2020_to_present group by `AREA NAME` order by count(*)',my_conn)
         col1.write('Rank according to total crimes')
