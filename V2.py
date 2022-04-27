@@ -1316,7 +1316,7 @@ def main():
         
         # Total Crime
         total_crime = int(df["DATE OCC"].count())
-        danger_level = round(df["DATE OCC"].count()/3898747*1000, 4)
+        danger_level = round(df["DATE OCC"].count()/3898747*10000, 4)
         skull = ":skull:" * int(round(danger_level, 0))
         
         left_column, right_column = st.columns(2)
